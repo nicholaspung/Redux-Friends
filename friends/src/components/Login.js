@@ -29,13 +29,22 @@ class Login extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.login}>
-                <input required placeholder="username" type="text" autoComplete="username" name="username" value={this.state.credentials.username} onChange={this.onInputChange}/>
-                <input required placeholder="password" type="password" autoComplete="current-password" name="password"value={this.state.credentials.password} onChange={this.onInputChange}/>
-                <button>Login</button>
-            </form>
+            <div>
+                <form onSubmit={this.login}>
+                    <input required placeholder="username" type="text" autoComplete="username" name="username" value={this.state.credentials.username} onChange={this.onInputChange}/>
+                    <input required placeholder="password" type="password" autoComplete="current-password" name="password"value={this.state.credentials.password} onChange={this.onInputChange}/>
+                    <button>Login</button>
+                </form>
+                {this.props.error && <p>{this.props.error.data.error}</p>}
+            </div>
         );
     }
 }
 
-export default connect(null, { login })(Login);
+const mapStateToProps = ({ error }) => {
+    return {
+        error
+    }
+}
+
+export default connect(mapStateToProps, { login })(Login);
