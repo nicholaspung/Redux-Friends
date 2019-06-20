@@ -8,7 +8,10 @@ import {
   LOGOUT,
   ADD_FRIEND_START,
   ADD_FRIEND_SUCCESS,
-  ADD_FRIEND_FAIL
+  ADD_FRIEND_FAIL,
+  UPDATE_FRIEND_START,
+  UPDATE_FRIEND_SUCCESS,
+  UPDATE_FRIEND_FAIL
 } from "../actions";
 
 const initializeState = {
@@ -19,7 +22,8 @@ const initializeState = {
   fetchingFriends: false,
   deletingFriend: false,
   savingFriends: false,
-  updatingFriends: false
+  updatingFriend: false,
+  addingFriend: false
 };
 
 export default function(state = initializeState, action) {
@@ -67,20 +71,37 @@ export default function(state = initializeState, action) {
         loggedIn: false
       };
     case ADD_FRIEND_START:
-        return {
-            ...state,
-            updatingFriends: true
-        }
+      return {
+        ...state,
+        addingFriend: true
+      };
     case ADD_FRIEND_SUCCESS:
+      return {
+        ...state,
+        addingFriend: false,
+        friends: action.payload
+      };
+    case ADD_FRIEND_FAIL:
+      return {
+        ...state,
+        addingFriend: false
+      };
+    case UPDATE_FRIEND_START:
         return {
             ...state,
-            updatingFriends: false,
+            updatingFriend: true
+        }
+    case UPDATE_FRIEND_SUCCESS:
+        return {
+            ...state,
+            updatingFriend: false,
             friends: action.payload
         }
-    case ADD_FRIEND_FAIL:
+    case UPDATE_FRIEND_FAIL:
         return {
             ...state,
-            updatingFriends: false
+            updatingFriend: false,
+            error: action.payload
         }
     default:
       return state;
