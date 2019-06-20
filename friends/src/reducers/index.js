@@ -5,7 +5,10 @@ import {
   FETCH_FRIENDS_FAIL,
   FETCH_FRIENDS_SUCCESS,
   FETCH_FRIENDS_START,
-  LOGOUT
+  LOGOUT,
+  ADD_FRIEND_START,
+  ADD_FRIEND_SUCCESS,
+  ADD_FRIEND_FAIL
 } from "../actions";
 
 const initializeState = {
@@ -16,7 +19,7 @@ const initializeState = {
   fetchingFriends: false,
   deletingFriend: false,
   savingFriends: false,
-  updatingFriend: false
+  updatingFriends: false
 };
 
 export default function(state = initializeState, action) {
@@ -59,9 +62,25 @@ export default function(state = initializeState, action) {
         error: "Could not fetch friends"
       };
     case LOGOUT:
+      return {
+        ...state,
+        loggedIn: false
+      };
+    case ADD_FRIEND_START:
         return {
             ...state,
-            loggedIn: false
+            updatingFriends: true
+        }
+    case ADD_FRIEND_SUCCESS:
+        return {
+            ...state,
+            updatingFriends: false,
+            friends: action.payload
+        }
+    case ADD_FRIEND_FAIL:
+        return {
+            ...state,
+            updatingFriends: false
         }
     default:
       return state;
