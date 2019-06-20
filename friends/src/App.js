@@ -5,15 +5,18 @@ import Login from "./components/Login";
 import { connect } from 'react-redux';
 import FriendPage from './components/FriendPage';
 import PrivateRoute from './components/PrivateRoute';
+import Logout from './components/Logout';
 
 function App(props) {
   return (
     <div className="App">
-      <Link to="/">Home</Link>
-      <Link to="/login">Login</Link>
+      {!props.loggedIn ? <Link to="/">Home</Link> : <Link to="/friends">Home</Link>}
+      {!props.loggedIn && <Link to="/login">Login</Link>}
+      {props.loggedIn && <Link to='/logout'>Logout</Link>}
 
-      <Route path="/login" component={Login} />
-      <PrivateRoute path="/" component={FriendPage}/>
+      {!props.loggedIn && <Route path="/login" component={Login} />}
+      {props.loggedIn && <Route path="/logout" component={Logout} />}
+      <PrivateRoute exact path="/friends" component={FriendPage}/>
     </div>
   );
 }

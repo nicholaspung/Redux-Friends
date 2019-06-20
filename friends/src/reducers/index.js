@@ -4,11 +4,12 @@ import {
   LOGIN_FAIL,
   FETCH_FRIENDS_FAIL,
   FETCH_FRIENDS_SUCCESS,
-  FETCH_FRIENDS_START
+  FETCH_FRIENDS_START,
+  LOGOUT
 } from "../actions";
 
 const initializeState = {
-  loggedIn: false,
+  loggedIn: Boolean(localStorage.getItem("token")),
   error: "",
   loggingIn: false,
   friends: [],
@@ -41,21 +42,26 @@ export default function(state = initializeState, action) {
         error: action.payload
       };
     case FETCH_FRIENDS_START:
-        return {
-            ...state,
-            fetchingFriends: true
-        }
+      return {
+        ...state,
+        fetchingFriends: true
+      };
     case FETCH_FRIENDS_SUCCESS:
-        return {
-            ...state,
-            fetchingFriends: false,
-            friends: action.payload
-        }
+      return {
+        ...state,
+        fetchingFriends: false,
+        friends: action.payload
+      };
     case FETCH_FRIENDS_FAIL:
+      return {
+        ...state,
+        fetchingFriends: true,
+        error: "Could not fetch friends"
+      };
+    case LOGOUT:
         return {
             ...state,
-            fetchingFriends: true,
-            error: "Could not fetch friends"
+            loggedIn: false
         }
     default:
       return state;

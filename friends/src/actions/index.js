@@ -8,6 +8,8 @@ export const FETCH_FRIENDS_START = 'FETCH_FRIENDS_START';
 export const FETCH_FRIENDS_SUCCESS = 'FETCH_FRIENDS_SUCCESS';
 export const FETCH_FRIENDS_FAIL = 'FETCH_FRIENDS_FAIL';
 
+export const LOGOUT = 'LOGOUT';
+
 export const login = cred => dispatch => {
     dispatch({ type: LOGIN_START });
      return axiosWithAuth()
@@ -22,12 +24,23 @@ export const login = cred => dispatch => {
             })
 } 
 
-export const getFriends = () => dispatch => {
+export const getFriends = friends => dispatch => {
     dispatch({ type: FETCH_FRIENDS_START });
-    axiosWithAuth()
-        .get('/friends')
-            .then(res => {
-                dispatch({ type: FETCH_FRIENDS_SUCCESS, payload: res.data })
-            })
-            .catch(err => console.log(err))
+    if (friends[0]) {
+        dispatch({ type: FETCH_FRIENDS_SUCCESS, payload: friends })
+    } else {
+        axiosWithAuth()
+            .get('/friends')
+                .then(res => {
+                    dispatch({ type: FETCH_FRIENDS_SUCCESS, payload: res.data })
+                })
+                .catch(err => console.log(err))
+    }
+}
+
+export const logout = () => {
+    localStorage.removeItem("token")
+    return {
+        type: LOGOUT
+    }
 }
